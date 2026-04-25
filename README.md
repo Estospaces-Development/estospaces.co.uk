@@ -28,7 +28,7 @@ npm run build
 - `src/pages/Home.jsx` - Main landing page
 - `src/contexts/ChatContext.jsx` - Chat widget context
 - `src/hooks/` - Custom hooks (useParallax, useWaitlist, useLiveChat)
-- `src/lib/supabase.js` - Supabase client (for newsletter)
+- `src/lib/landingApi.js` - GCP/Cloud Run landing API client for newsletter, waitlist, and chat paths
 - `src/components/ui/` - Shared UI components
 
 ## Deployment

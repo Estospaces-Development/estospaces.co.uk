@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Twitter, Instagram, Linkedin, Send, Loader2 } from 'lucide-react';
 import logoIcon from '../../assets/logo-icon.png';
-import { supabase } from '../../lib/supabase';
+import { postJson } from '../../lib/landingApi';
 import { useChat } from '../../contexts/ChatContext';
 
 const Footer = () => {
@@ -21,31 +21,11 @@ const Footer = () => {
         setError('');
 
         try {
-            // Check if Supabase is configured
-            if (!supabase) {
-                throw new Error('Newsletter feature is not configured yet.');
-            }
+            await postJson('/api/send-newsletter-notification', {
+                email: email.trim().toLowerCase(),
+                source: 'footer',
+            });
 
-            // Insert email into newsletter_subscribers table
-            const { error: supabaseError } = await supabase
-                .from('newsletter_subscribers')
-                .insert([
-                    {
-                        email: email.trim().toLowerCase(),
-                        subscribed_at: new Date().toISOString(),
-                        source: 'footer'
-                    }
-                ]);
-
-            if (supabaseError) {
-                // Check for duplicate email
-                if (supabaseError.code === '23505') {
-                    throw new Error('This email is already subscribed!');
-                }
-                throw supabaseError;
-            }
-
-            console.log('Email saved to Supabase:', email);
             setSubmitted(true);
             setEmail('');
 
